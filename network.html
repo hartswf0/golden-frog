@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Constellations - Women in Cinematography</title>
+    <link rel="stylesheet" href="css/network.css">
+</head>
+<body>
+    <div id="network-scene"></div>
+    
+    <!-- Node Info Sidebar -->
+    <div class="node-info">
+        <div class="close-btn">×</div>
+        <div class="info-content"></div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters">
+        <button class="filter-btn active" data-filter="active">Active</button>
+        <button class="filter-btn" data-filter="retired">Retired</button>
+        <button class="filter-btn" data-filter="nominee">Nominee</button>
+    </div>
+
+    <!-- Progress Counter -->
+    <div class="constellation-counter">
+        <span>Connect 3 nodes to form a constellation</span>
+        <div class="nodes-connected">0/3</div>
+    </div>
+
+    <!-- Narrative Text -->
+    <div class="narrative-text">
+        Every node tells a story, but connections reveal the patterns. Draw a constellation to map the gaps in representation.
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.1/gsap.min.js"></script>
+    <script src="js/network.js"></script>
+</body>
+</html>

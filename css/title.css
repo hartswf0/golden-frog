@@ -1,0 +1,238 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: black;
+    color: white;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.circle-viewport {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: 300px;
+    border: 2px solid rgba(218, 165, 32, 0.4);
+    border-radius: 50%;
+    opacity: 0;
+    animation: appear 2s ease forwards;
+    box-shadow: 0 0 50px rgba(218, 165, 32, 0.2);
+}
+
+.circle-viewport::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    border: 1px solid rgba(218, 165, 32, 0.2);
+    border-radius: 50%;
+    animation: pulse 4s infinite ease-in-out;
+}
+
+.circle-viewport::after {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    right: -20px;
+    bottom: -20px;
+    border: 1px solid rgba(218, 165, 32, 0.1);
+    border-radius: 50%;
+    animation: pulse 4s infinite ease-in-out 1s;
+}
+
+.text-sequence {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+}
+
+.text-frame {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    opacity: 0;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+    line-height: 1.6;
+    max-width: 800px;
+    padding: 2rem;
+    pointer-events: none;
+}
+
+.text-frame p {
+    margin: 0.8rem 0;
+    font-weight: 300;
+}
+
+.text-frame p:first-child {
+    color: rgb(218, 165, 32);
+    font-weight: 400;
+}
+
+.title-frame {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    opacity: 0;
+    transition: opacity 1s ease;
+}
+
+.title-frame.visible {
+    opacity: 1;
+}
+
+.title-frame h1 {
+    font-size: 3rem;
+    color: rgb(218, 165, 32);
+    margin-bottom: 1rem;
+    font-weight: 300;
+    letter-spacing: 3px;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.8);
+    letter-spacing: 2px;
+}
+
+.credits {
+    position: fixed;
+    bottom: 7rem;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    line-height: 1.6;
+    opacity: 0;
+}
+
+.credits p {
+    margin: 0.5rem 0;
+}
+
+.credits.visible {
+    animation: fadeIn 2s ease forwards;
+}
+
+.credits p {
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.enter-btn {
+    position: fixed;
+    bottom: 3rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: inline-block;
+    padding: 0.8rem 2.5rem;
+    background: transparent;
+    border: 1px solid rgb(218, 165, 32);
+    color: rgb(218, 165, 32);
+    font-size: 0.9rem;
+    letter-spacing: 3px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0;
+    animation: fadeIn 0.8s ease forwards 1s;
+}
+
+.enter-btn:hover {
+    background: rgba(218, 165, 32, 0.1);
+    transform: translateX(-50%) translateY(-2px);
+    letter-spacing: 4px;
+}
+
+.enter-btn:active {
+    transform: translateX(-50%) translateY(0);
+}
+
+.hidden {
+    display: none;
+}
+
+@keyframes pulse {
+    0%, 100% { 
+        transform: scale(1) rotate(0deg); 
+        opacity: 0.3;
+    }
+    50% { 
+        transform: scale(1.1) rotate(180deg); 
+        opacity: 0.6;
+    }
+}
+
+@keyframes appear {
+    0% { 
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.5) rotate(0deg);
+    }
+    100% { 
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1) rotate(360deg);
+    }
+}
+
+@keyframes textAppear {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -45%);
+    }
+    10% {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+    90% {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -55%);
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes ripple {
+    0% {
+        box-shadow: 0 0 0 0 rgba(218, 165, 32, 0.3);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(218, 165, 32, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(218, 165, 32, 0);
+    }
+}

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Coverage - Golden Frog</title>
+    <link rel="stylesheet" href="css/ripples.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+</head>
+<body>
+    <div id="ripples-scene"></div>
+    
+    <!-- <div class="narrative-text">
+        <h1>Media Coverage</h1>
+        <p>Media coverage is a reflection of the industry's priorities. How often do women's contributions create ripples in this vast surface?</p>
+    </div> -->
+
+    <div id="tooltip" class="tooltip">
+        <h3 class="headline"></h3>
+        <p class="sentiment"></p>
+        <p class="mentions"></p>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2 class="article-headline"></h2>
+            <div class="article-meta">
+                <p class="publication"></p>
+                <p class="date"></p>
+            </div>
+            <p class="summary"></p>
+        </div>
+    </div>
+
+    <button class="next-layer-btn">Explore Instagram Voices</button>
+
+    <script src="js/ripples.js"></script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background: #000020;
+    color: #fff;
+}
+
+#network-scene {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.network-controls {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 15px;
+    border-radius: 8px;
+    color: white;
+    font-family: 'Arial', sans-serif;
+}
+
+.status-filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.status-filters button {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.status-filters button:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.status-filters button.active {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.constellation-counter {
+    text-align: center;
+    font-size: 14px;
+}
+
+.nodes-connected {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.node-tooltip {
+    position: fixed;
+    display: none;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 10px;
+    border-radius: 4px;
+    font-family: 'Arial', sans-serif;
+    font-size: 14px;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+.tooltip-name {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.tooltip-status {
+    color: #aaa;
+    font-style: italic;
+    margin-bottom: 5px;
+}
+
+.tooltip-stats {
+    font-size: 12px;
+    color: #ddd;
+}
+
+.narrative-text {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    font-size: 1.5em;
+    color: rgba(255, 255, 255, 0.8);
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s;
+    width: 80%;
+    max-width: 800px;
+}
+
+.narrative-text.visible {
+    opacity: 1;
+}
+
+.next-layer-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    padding: 15px 30px;
+    background: rgba(52, 152, 219, 0.2);
+    border: 2px solid rgba(52, 152, 219, 0.8);
+    color: #fff;
+    font-size: 16px;
+    border-radius: 25px;
+    cursor: pointer;
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 0 20px rgba(52, 152, 219, 0.3);
+}
+
+.next-layer-btn:hover {
+    background: rgba(52, 152, 219, 0.4);
+    box-shadow: 0 0 30px rgba(52, 152, 219, 0.5);
+    transform: translateY(-2px);
+}
