@@ -3,176 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Golden Frog Competition: Interactive Narrative</title>
+    <title>🐸 Golden Frog Narrative Pond</title>
     <style>
         :root {
-            --primary-green: #2ecc71;
-            --secondary-green: #27ae60;
-            --dark-background: #2c3e50;
-            --light-text: #ecf0f1;
+            --pond-deep-blue: #1B4F72;
+            --pond-light-blue: #5DADE2;
+            --lily-pad-green: #2ECC71;
+            --ripple-color: rgba(255,255,255,0.2);
             --accent-color: #e74c3c;
-            --box-size: 80px;
-            --circle-size: 300px;
+            --overlay-bg: rgba(0,0,0,0.85);
+            --text-color: #ecf0f1;
+            --button-bg: #27ae60;
+            --button-hover: #2ecc71;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            touch-action: manipulation;
         }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: var(--dark-background);
-            color: var(--light-text);
-            overscroll-behavior: none;
-        }
-
-        .golden-frog-app {
-            max-width: 100vw;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        body, html {
+            height: 100%;
             overflow: hidden;
-            perspective: 1000px;
+            background: linear-gradient(to bottom, var(--pond-deep-blue), var(--pond-light-blue));
+            font-family: 'Arial', sans-serif;
+            cursor: grab;
         }
 
-        header {
-            text-align: center;
-            padding: 20px;
-        }
-
-        .spinning-circle {
-            width: var(--circle-size);
-            height: var(--circle-size);
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+        #pond-container {
             position: relative;
+            width: 100vw;
+            height: 100vh;
+            perspective: 1000px;
             transform-style: preserve-3d;
-            animation: spin 60s linear infinite;
-            box-shadow: 0 10px 50px rgba(0,0,0,0.3);
-            margin-top: 50px;
+            overflow: hidden;
         }
 
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .narrative-box {
+        .narrative-node {
             position: absolute;
-            width: var(--box-size);
-            height: var(--box-size);
-            background-color: rgba(0,0,0,0.8);
-            border-radius: 10px;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: var(--lily-pad-green);
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             cursor: pointer;
-            transition: all 0.3s ease;
-            color: white;
-            font-size: 12px;
-            text-align: center;
-            padding: 5px;
+            transition: all 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+            transform-origin: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
 
-        .narrative-box:hover {
-            transform: scale(1.2) rotate(15deg);
-            background-color: var(--accent-color);
-            z-index: 1;
+        .narrative-node:hover {
+            transform: scale(1.2) rotate(360deg);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
         }
 
-        .narrative-overlay {
+        .narrative-node .emoji {
+            font-size: 40px;
+            transition: transform 0.3s ease;
+        }
+
+        .narrative-node:hover .emoji {
+            transform: scale(1.2) rotate(20deg);
+        }
+
+        .connection-line {
+            position: absolute;
+            background: var(--ripple-color);
+            pointer-events: none;
+            transition: all 0.5s ease;
+        }
+
+        #narrative-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.95);
+            background: var(--overlay-bg);
             display: flex;
-            align-items: center;
             justify-content: center;
-            z-index: 1000;
+            align-items: center;
+            z-index: 100;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.3s ease;
             padding: 20px;
         }
 
-        .narrative-overlay.visible {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .narrative-content {
+        #narrative-content {
             background: rgba(255,255,255,0.1);
-            border-radius: 15px;
+            border-radius: 20px;
             padding: 30px;
-            max-width: 90%;
+            width: 80%;
+            max-width: 800px;
             max-height: 80%;
             overflow-y: auto;
-            text-align: center;
+            backdrop-filter: blur(10px);
+            color: var(--text-color);
             position: relative;
         }
 
-        .input-section {
+        #close-narrative {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,0,0,0.5);
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        #input-area {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 30px;
-            width: 100%;
-            max-width: 400px;
-        }
-
-        .narrative-input {
             width: 80%;
-            padding: 10px;
-            margin: 20px 0;
-            border-radius: 20px;
-            border: 2px solid var(--primary-green);
-            font-size: 16px;
-            text-align: center;
-            background: rgba(255,255,255,0.1);
-            color: var(--light-text);
+            max-width: 600px;
         }
 
-        .submit-btn, .close-btn {
-            background-color: var(--accent-color);
+        #user-input {
+            flex-grow: 1;
+            padding: 10px;
+            background: rgba(255,255,255,0.2);
+            border: 2px solid var(--lily-pad-green);
+            border-radius: 20px;
+            color: white;
+            margin-right: 10px;
+            font-size: 16px;
+        }
+
+        #submit-story {
+            background: var(--button-bg);
             color: white;
             border: none;
             padding: 10px 20px;
             border-radius: 20px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin: 10px;
-            font-size: 14px;
+            transition: transform 0.3s ease, background 0.3s ease;
+            font-size: 16px;
         }
 
-        .submit-btn:hover, .close-btn:hover {
-            background-color: var(--primary-green);
-            transform: scale(1.05);
+        #submit-story:hover {
+            transform: scale(1.1);
+            background: var(--button-hover);
         }
 
-        .close-btn {
+        .ripple {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            background: none;
-            color: white;
-            font-size: 30px;
-            line-height: 30px;
+            border-radius: 50%;
+            background: var(--ripple-color);
+            transform: scale(0);
+            animation: ripple 2s linear infinite;
         }
 
-        .hidden {
-            display: none;
-        }
-
-        .data-visualization {
-            margin-top: 20px;
-            width: 100%;
-            height: 200px;
+        @keyframes ripple {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(4);
+                opacity: 0;
+            }
         }
 
         .user-narrative {
@@ -182,653 +183,447 @@
             border-radius: 10px;
             text-align: left;
             color: #fff;
+            display: flex;
+            align-items: center;
         }
 
-        .nominee-list {
-            list-style: none;
-            padding: 0;
-            margin-top: 10px;
-            text-align: left;
+        .user-narrative .icon {
+            margin-right: 10px;
+            font-size: 20px;
         }
 
-        .nominee-list li {
-            margin-bottom: 5px;
+        .data-visualization {
+            margin-top: 20px;
+            width: 100%;
+            height: 300px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .data-visualization canvas {
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
         }
 
         @media (max-width: 600px) {
-            .spinning-circle {
-                width: 250px;
-                height: 250px;
+            .narrative-node {
+                width: 80px;
+                height: 80px;
             }
 
-            .narrative-box {
-                width: 60px;
-                height: 60px;
-                font-size: 10px;
+            .narrative-node .emoji {
+                font-size: 30px;
             }
 
-            .narrative-input {
-                width: 90%;
+            #user-input {
+                font-size: 14px;
+            }
+
+            #submit-story {
+                font-size: 14px;
             }
         }
     </style>
 </head>
 <body>
-    <div id="app" class="golden-frog-app">
-        <header>
-            <h1>Golden Frog Competition</h1>
-        </header>
-        
-        <main class="game-container">
-            <div id="spinning-circle" class="spinning-circle">
-                <!-- Narrative paths will be dynamically generated here -->
-            </div>
-            
-            <div id="narrative-overlay" class="narrative-overlay hidden">
-                <div class="narrative-content">
-                    <button id="close-narrative" class="close-btn">×</button>
-                    <div id="narrative-content-inner">
-                        <!-- Dynamic content goes here -->
-                    </div>
-                </div>
-            </div>
-            
-            <div class="input-section">
-                <input 
-                    type="text" 
-                    id="user-input" 
-                    placeholder="Share Your Golden Frog Journey" 
-                    class="narrative-input"
-                >
-                <button id="submit-narrative" class="submit-btn">Hop In!</button>
-            </div>
-        </main>
+    <div id="pond-container"></div>
+    <div id="narrative-overlay">
+        <div id="narrative-content">
+            <button id="close-narrative">✖</button>
+            <!-- Dynamic content will be injected here -->
+        </div>
+    </div>
+    <div id="input-area">
+        <input type="text" id="user-input" placeholder="Hop into your story...">
+        <button id="submit-story">🐸 Splash!</button>
     </div>
 
     <script>
-        // Fake data embedded directly for experimentation
+        // Fake data for demonstration
         const camerimageData = {
-          "CamerimageFestival": {
-            "Categories": [
-              {
-                "CategoryName": "Golden Frog Competition",
-                "Nominees": [
-                  {
-                    "Year": 1993,
-                    "NomineeID": "GF1993-001",
-                    "NomineeName": "Anna Kowalski",
-                    "Gender": "Female",
-                    "FilmTitle": "Light Shadows",
-                    "Country": "Poland"
-                  },
-                  {
-                    "Year": 1994,
-                    "NomineeID": "GF1994-002",
-                    "NomineeName": "John Smith",
-                    "Gender": "Male",
-                    "FilmTitle": "Silent Echoes",
-                    "Country": "USA"
-                  },
-                  {
-                    "Year": 1995,
-                    "NomineeID": "GF1995-003",
-                    "NomineeName": "Maria Garcia",
-                    "Gender": "Female",
-                    "FilmTitle": "Nightfall Symphony",
-                    "Country": "Spain"
-                  },
-                  {
-                    "Year": 2000,
-                    "NomineeID": "GF2000-010",
-                    "NomineeName": "Alex Müller",
-                    "Gender": "Male",
-                    "FilmTitle": "Urban Nights",
-                    "Country": "Germany"
-                  },
-                  {
-                    "Year": 2018,
-                    "NomineeID": "GF2018-020",
-                    "NomineeName": "Elena Ramirez",
-                    "Gender": "Female",
-                    "FilmTitle": "Dawn of Light",
-                    "Country": "Mexico"
-                  },
-                  {
-                    "Year": 2020,
-                    "NomineeID": "GF2020-025",
-                    "NomineeName": "Liam Johnson",
-                    "Gender": "Male",
-                    "FilmTitle": "Silent Echoes",
-                    "Country": "Canada"
-                  },
-                  {
-                    "Year": 2024,
-                    "NomineeID": "GF2024-032",
-                    "NomineeName": "Li Wei",
-                    "Gender": "Female",
-                    "FilmTitle": "Reflections of Time",
-                    "Country": "China"
-                  }
+            "CamerimageFestival": {
+                "Categories": [
+                    {
+                        "CategoryName": "Golden Frog Competition",
+                        "Nominees": [
+                            {
+                                "Year": 1993,
+                                "NomineeID": "GF1993-001",
+                                "NomineeName": "Anna Kowalski",
+                                "Gender": "Female",
+                                "FilmTitle": "Light Shadows",
+                                "Country": "Poland"
+                            },
+                            {
+                                "Year": 1994,
+                                "NomineeID": "GF1994-002",
+                                "NomineeName": "John Smith",
+                                "Gender": "Male",
+                                "FilmTitle": "Silent Echoes",
+                                "Country": "USA"
+                            },
+                            // Additional nominees...
+                        ]
+                    },
+                    // Additional categories...
+                ],
+                "Anomalies": [
+                    // Anomaly data...
                 ]
-              },
-              {
-                "CategoryName": "Silver Frog Competition",
-                "Nominees": [
-                  {
-                    "Year": 1993,
-                    "NomineeID": "SF1993-001",
-                    "NomineeName": "David Brown",
-                    "Gender": "Male",
-                    "FilmTitle": "Morning Dew",
-                    "Country": "UK"
-                  },
-                  {
-                    "Year": 1994,
-                    "NomineeID": "SF1994-002",
-                    "NomineeName": "Elena Petrova",
-                    "Gender": "Female",
-                    "FilmTitle": "Twilight Whisper",
-                    "Country": "Russia"
-                  },
-                  {
-                    "Year": 1995,
-                    "NomineeID": "SF1995-003",
-                    "NomineeName": "Michael Nguyen",
-                    "Gender": "Male",
-                    "FilmTitle": "Dawn Chorus",
-                    "Country": "Vietnam"
-                  },
-                  {
-                    "Year": 2000,
-                    "NomineeID": "SF2000-010",
-                    "NomineeName": "Alex Müller",
-                    "Gender": "Male",
-                    "FilmTitle": "Urban Nights",
-                    "Country": "Germany"
-                  },
-                  {
-                    "Year": 2024,
-                    "NomineeID": "SF2024-032",
-                    "NomineeName": "Sofia Rossi",
-                    "Gender": "Female",
-                    "FilmTitle": "Eternal Horizon",
-                    "Country": "Italy"
-                  }
-                ]
-              },
-              {
-                "CategoryName": "Bronze Frog Competition",
-                "Nominees": [
-                  {
-                    "Year": 1993,
-                    "NomineeID": "BF1993-001",
-                    "NomineeName": "Tomasz Nowak",
-                    "Gender": "Male",
-                    "FilmTitle": "Silent Streams",
-                    "Country": "Poland"
-                  },
-                  {
-                    "Year": 1994,
-                    "NomineeID": "BF1994-002",
-                    "NomineeName": "Aisha Khan",
-                    "Gender": "Female",
-                    "FilmTitle": "Golden Dusk",
-                    "Country": "Pakistan"
-                  },
-                  {
-                    "Year": 1995,
-                    "NomineeID": "BF1995-003",
-                    "NomineeName": "Hiroshi Tanaka",
-                    "Gender": "Male",
-                    "FilmTitle": "Crystal Rain",
-                    "Country": "Japan"
-                  },
-                  {
-                    "Year": 2024,
-                    "NomineeID": "BF2024-032",
-                    "NomineeName": "Emily Clark",
-                    "Gender": "Female",
-                    "FilmTitle": "Silver Lining",
-                    "Country": "USA"
-                  }
-                ]
-              },
-              {
-                "CategoryName": "Documentary Category",
-                "Nominees": [
-                  {
-                    "Year": 1993,
-                    "NomineeID": "DOC1993-001",
-                    "NomineeName": "Laura Müller",
-                    "Gender": "Female",
-                    "FilmTitle": "Earth's Pulse",
-                    "Country": "Germany"
-                  },
-                  {
-                    "Year": 1994,
-                    "NomineeID": "DOC1994-002",
-                    "NomineeName": "Carlos Mendes",
-                    "Gender": "Male",
-                    "FilmTitle": "Ocean Depths",
-                    "Country": "Brazil"
-                  },
-                  {
-                    "Year": 1995,
-                    "NomineeID": "DOC1995-003",
-                    "NomineeName": "Fatima Al-Sayed",
-                    "Gender": "Female",
-                    "FilmTitle": "Desert Winds",
-                    "Country": "Egypt"
-                  },
-                  {
-                    "Year": 2024,
-                    "NomineeID": "DOC2024-032",
-                    "NomineeName": "Liam O'Connor",
-                    "Gender": "Male",
-                    "FilmTitle": "Urban Landscapes",
-                    "Country": "Ireland"
-                  },
-                  {
-                    "Year": 1995,
-                    "NomineeID": "DOC1995-003",
-                    "NomineeName": "Maria Garcia",
-                    "Gender": "Female",
-                    "FilmTitle": "Nightfall Symphony",
-                    "Country": "Spain"
-                  },
-                  {
-                    "Year": 2024,
-                    "NomineeID": "DOC2024-032",
-                    "NomineeName": "Liam Johnson",
-                    "Gender": "Male",
-                    "FilmTitle": "Silent Echoes",
-                    "Country": "Canada"
-                  }
-                ]
-              },
-              {
-                "CategoryName": "Student Category",
-                "Nominees": [
-                  {
-                    "Year": 1993,
-                    "NomineeID": "ST1993-001",
-                    "NomineeName": "Nina Ivanova",
-                    "Gender": "Female",
-                    "FilmTitle": "First Light",
-                    "Country": "Ukraine"
-                  },
-                  {
-                    "Year": 1994,
-                    "NomineeID": "ST1994-002",
-                    "NomineeName": "Marcus Lee",
-                    "Gender": "Male",
-                    "FilmTitle": "Hidden Paths",
-                    "Country": "South Korea"
-                  },
-                  {
-                    "Year": 1995,
-                    "NomineeID": "ST1995-003",
-                    "NomineeName": "Sara Ahmed",
-                    "Gender": "Female",
-                    "FilmTitle": "Mountain Echoes",
-                    "Country": "Saudi Arabia"
-                  },
-                  {
-                    "Year": 2024,
-                    "NomineeID": "ST2024-032",
-                    "NomineeName": "Noah Thompson",
-                    "Gender": "Male",
-                    "FilmTitle": "Future Visions",
-                    "Country": "Canada"
-                  },
-                  {
-                    "Year": 2018,
-                    "NomineeID": "ST2018-020",
-                    "NomineeName": "Elena Ramirez",
-                    "Gender": "Female",
-                    "FilmTitle": "Dawn of Light",
-                    "Country": "Mexico"
-                  }
-                ]
-              },
-              {
-                "CategoryName": "Short Film Category",
-                "Nominees": [
-                  {
-                    "Year": 1993,
-                    "NomineeID": "SFIL1993-001",
-                    "NomineeName": "Kevin Brown",
-                    "Gender": "Male",
-                    "FilmTitle": "Quick Glance",
-                    "Country": "USA"
-                  },
-                  {
-                    "Year": 1994,
-                    "NomineeID": "SFIL1994-002",
-                    "NomineeName": "Maya Singh",
-                    "Gender": "Female",
-                    "FilmTitle": "Brief Encounter",
-                    "Country": "India"
-                  },
-                  {
-                    "Year": 1995,
-                    "NomineeID": "SFIL1995-003",
-                    "NomineeName": "Igor Petrov",
-                    "Gender": "Male",
-                    "FilmTitle": "Momentary Thoughts",
-                    "Country": "Russia"
-                  },
-                  {
-                    "Year": 2020,
-                    "NomineeID": "SFIL2020-015",
-                    "NomineeName": "Liam Johnson",
-                    "Gender": "Male",
-                    "FilmTitle": "Silent Echoes",
-                    "Country": "Canada"
-                  },
-                  {
-                    "Year": 2024,
-                    "NomineeID": "SFIL2024-032",
-                    "NomineeName": "Zoe Taylor",
-                    "Gender": "Female",
-                    "FilmTitle": "Flash Memories",
-                    "Country": "Australia"
-                  }
-                ]
-              },
-              {
-                "CategoryName": "Best Animation",
-                "Nominees": [
-                  {
-                    "Year": 2005,
-                    "NomineeID": "BA2005-001",
-                    "NomineeName": "Tomoko Sato",
-                    "Gender": "Female",
-                    "FilmTitle": "Animated Dreams",
-                    "Country": "Japan"
-                  },
-                  {
-                    "Year": 2006,
-                    "NomineeID": "BA2006-002",
-                    "NomineeName": "Lucas Martinez",
-                    "Gender": "Male",
-                    "FilmTitle": "Colorful Journeys",
-                    "Country": "Spain"
-                  },
-                  {
-                    "Year": 2024,
-                    "NomineeID": "BA2024-030",
-                    "NomineeName": "Aisha Bello",
-                    "Gender": "Female",
-                    "FilmTitle": "Whimsical Worlds",
-                    "Country": "Nigeria"
-                  }
-                ]
-              }
-            ],
-            "Anomalies": [
-              {
-                "Description": "Misclassified Nominee in Golden Frog",
-                "Details": {
-                  "Year": 1995,
-                  "NomineeID": "GF1995-003",
-                  "NomineeName": "Maria Garcia",
-                  "GoldenFrogFilmTitle": "Nightfall Symphony",
-                  "DocumentaryFilmTitle": "Nightfall Symphony",
-                  "Issue": "Listed under both Golden Frog and Documentary categories."
-                }
-              },
-              {
-                "Description": "Duplicate Nominee Across Categories",
-                "Details": {
-                  "Year": 2000,
-                  "NomineeID": "GF2000-010",
-                  "NomineeName": "Alex Müller",
-                  "GoldenFrogFilmTitle": "Urban Nights",
-                  "SilverFrogFilmTitle": "Urban Nights",
-                  "Issue": "Appears in both Golden Frog and Silver Frog competitions."
-                }
-              },
-              {
-                "Description": "Missing Year Representation",
-                "Details": {
-                  "Year": 2010,
-                  "Category": "Golden Frog Competition",
-                  "Issue": "No entries for Golden Frog Competition in 2010."
-                }
-              },
-              {
-                "Description": "Overlapping Film Titles",
-                "Details": {
-                  "Year": 2020,
-                  "FilmTitle": "Silent Echoes",
-                  "GoldenFrogNomineeID": "GF2020-025",
-                  "ShortFilmNomineeID": "SFIL2020-015",
-                  "Issue": "Same film title appears in both Golden Frog and Short Film categories."
-                }
-              },
-              {
-                "Description": "Incorrect Category Attribution",
-                "Details": {
-                  "Year": 2018,
-                  "NomineeID": "GF2018-020",
-                  "NomineeName": "Elena Ramirez",
-                  "GoldenFrogFilmTitle": "Dawn of Light",
-                  "StudentFilmTitle": "Dawn of Light",
-                  "Issue": "Nominee categorized under Student Category instead of Golden Frog."
-                }
-              },
-              {
-                "Description": "Extra Category Introduced Midway",
-                "Details": {
-                  "YearIntroduced": 2005,
-                  "CategoryName": "Best Animation",
-                  "Issue": "New category introduced without updating verification prompts."
-                }
-              }
-            ]
-          }
+            }
         };
 
-        class GoldenFrogApp {
+        class NarrativePond {
             constructor(data) {
                 this.data = data.CamerimageFestival;
-                this.spinningCircle = document.getElementById('spinning-circle');
+                this.container = document.getElementById('pond-container');
                 this.narrativeOverlay = document.getElementById('narrative-overlay');
-                this.narrativeContent = document.getElementById('narrative-content-inner');
+                this.narrativeContent = document.getElementById('narrative-content');
                 this.userInput = document.getElementById('user-input');
-                this.submitButton = document.getElementById('submit-narrative');
+                this.submitButton = document.getElementById('submit-story');
                 this.closeNarrativeBtn = document.getElementById('close-narrative');
-                
-                this.categories = this.data.Categories;
-                this.anomalies = this.data.Anomalies;
+                this.categories = this.getInitialCategories();
+                this.userNarratives = [];
 
-                this.initializeApp();
+                this.init();
             }
 
-            initializeApp() {
-                this.createNarrativePaths();
-                this.attachEventListeners();
-                this.generateAnomalyNotifications();
+            init() {
+                this.createRippleBackground();
+                this.createNarrativeNodes();
+                this.setupEventListeners();
             }
 
-            createNarrativePaths() {
-                // For simplicity, use main categories as narrative paths
-                // Exclude 'Anomalies' and focus on competition categories
-                const competitionCategories = this.categories.filter(cat => cat.CategoryName.includes('Frog'));
-                
-                competitionCategories.forEach((category, index) => {
-                    const box = document.createElement('div');
-                    box.classList.add('narrative-box');
-                    box.dataset.categoryName = category.CategoryName;
-                    box.textContent = category.CategoryName.replace(' Competition', '');
-                    // Calculate position around the circle
-                    const angle = (360 / competitionCategories.length) * index;
-                    const radius = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--circle-size')) / 2 - parseInt(getComputedStyle(document.documentElement).getPropertyValue('--box-size'));
-                    const rad = angle * (Math.PI / 180);
-                    const x = radius * Math.cos(rad);
-                    const y = radius * Math.sin(rad);
-                    box.style.transform = `translate(${x}px, ${y}px)`;
-                    
-                    box.addEventListener('click', () => this.openNarrativePath(category));
-                    this.spinningCircle.appendChild(box);
+            getInitialCategories() {
+                return [
+                    {
+                        id: 'diversity',
+                        emoji: '🌈',
+                        title: 'Diversity Insights',
+                        description: 'Explore nominee demographics and diversity trends.',
+                        color: '#e74c3c'
+                    },
+                    {
+                        id: 'geography',
+                        emoji: '🌍',
+                        title: 'Geographic Distribution',
+                        description: 'Visualize the global spread of nominees.',
+                        color: '#3498db'
+                    },
+                    {
+                        id: 'history',
+                        emoji: '⏳',
+                        title: 'Historical Trends',
+                        description: 'Analyze past competition patterns and milestones.',
+                        color: '#f1c40f'
+                    },
+                    {
+                        id: 'impact',
+                        emoji: '💡',
+                        title: 'Social Impact',
+                        description: 'Measure the competition\'s broader influence on cinematography.',
+                        color: '#9b59b6'
+                    }
+                ];
+            }
+
+            createRippleBackground() {
+                for (let i = 0; i < 15; i++) {
+                    const ripple = document.createElement('div');
+                    ripple.classList.add('ripple');
+                    ripple.style.left = `${Math.random() * 100}%`;
+                    ripple.style.top = `${Math.random() * 100}%`;
+                    ripple.style.animationDelay = `${Math.random() * 2}s`;
+                    this.container.appendChild(ripple);
+                }
+            }
+
+            createNarrativeNodes() {
+                this.categories.forEach((category, index) => {
+                    const node = document.createElement('div');
+                    node.classList.add('narrative-node');
+                    node.dataset.id = category.id;
+                    node.style.backgroundColor = category.color;
+
+                    // Emoji Element
+                    const emoji = document.createElement('div');
+                    emoji.classList.add('emoji');
+                    emoji.textContent = category.emoji;
+                    node.appendChild(emoji);
+
+                    // Positioning nodes in a circular layout
+                    const angle = (index / this.categories.length) * 2 * Math.PI;
+                    const radius = Math.min(window.innerWidth, window.innerHeight) * 0.3;
+                    const x = window.innerWidth / 2 + Math.cos(angle) * radius - 50; // 50 is half the node's width
+                    const y = window.innerHeight / 2 + Math.sin(angle) * radius - 50; // 50 is half the node's height
+
+                    node.style.left = `${x}px`;
+                    node.style.top = `${y}px`;
+
+                    // Click event to open narrative
+                    node.addEventListener('click', () => this.openNarrative(category));
+
+                    this.container.appendChild(node);
+                });
+
+                // Create connections between nodes
+                this.createConnections();
+            }
+
+            createConnections() {
+                const nodes = document.querySelectorAll('.narrative-node');
+                nodes.forEach((node, index) => {
+                    const nextNode = nodes[(index + 1) % nodes.length];
+                    this.drawConnection(node, nextNode);
                 });
             }
 
-            attachEventListeners() {
-                this.submitButton.addEventListener('click', () => this.handleUserSubmission());
+            drawConnection(node1, node2) {
+                const svgNS = "http://www.w3.org/2000/svg";
+                const svg = document.createElementNS(svgNS, "svg");
+                svg.setAttribute('width', '100%');
+                svg.setAttribute('height', '100%');
+                svg.style.position = 'absolute';
+                svg.style.top = '0';
+                svg.style.left = '0';
+                svg.style.pointerEvents = 'none';
+
+                const path = document.createElementNS(svgNS, 'path');
+                const rect1 = node1.getBoundingClientRect();
+                const rect2 = node2.getBoundingClientRect();
+
+                const startX = rect1.left + rect1.width / 2 - node1.parentElement.getBoundingClientRect().left;
+                const startY = rect1.top + rect1.height / 2 - node1.parentElement.getBoundingClientRect().top;
+                const endX = rect2.left + rect2.width / 2 - node2.parentElement.getBoundingClientRect().left;
+                const endY = rect2.top + rect2.height / 2 - node2.parentElement.getBoundingClientRect().top;
+
+                const midX = (startX + endX) / 2;
+                const midY = (startY + endY) / 2 - 50; // Control point for the curve
+
+                path.setAttribute('d', `M${startX},${startY} Q${midX},${midY} ${endX},${endY}`);
+                path.setAttribute('stroke', 'rgba(255,255,255,0.2)');
+                path.setAttribute('stroke-width', '2');
+                path.setAttribute('fill', 'none');
+
+                svg.appendChild(path);
+                this.container.appendChild(svg);
+            }
+
+            setupEventListeners() {
+                this.submitButton.addEventListener('click', () => this.submitStory());
                 this.closeNarrativeBtn.addEventListener('click', () => this.closeNarrativeOverlay());
-                
-                // Gesture-based interactions
+
+                // Dragging functionality
+                let isDragging = false;
+                let startX, startY, scrollLeft, scrollTop;
+
+                this.container.addEventListener('mousedown', (e) => {
+                    isDragging = true;
+                    this.container.style.cursor = 'grabbing';
+                    startX = e.pageX - this.container.offsetLeft;
+                    startY = e.pageY - this.container.offsetTop;
+                    scrollLeft = this.container.scrollLeft;
+                    scrollTop = this.container.scrollTop;
+                });
+
+                this.container.addEventListener('mouseleave', () => {
+                    isDragging = false;
+                    this.container.style.cursor = 'grab';
+                });
+
+                this.container.addEventListener('mouseup', () => {
+                    isDragging = false;
+                    this.container.style.cursor = 'grab';
+                });
+
+                this.container.addEventListener('mousemove', (e) => {
+                    if (!isDragging) return;
+                    e.preventDefault();
+                    const x = e.pageX - this.container.offsetLeft;
+                    const y = e.pageY - this.container.offsetTop;
+                    const walkX = (x - startX) * 1.5; // Scroll-fast
+                    const walkY = (y - startY) * 1.5;
+                    this.container.scrollLeft = scrollLeft - walkX;
+                    this.container.scrollTop = scrollTop - walkY;
+                });
+
+                // Gesture-based navigation for touch devices
                 let touchStartX = 0;
                 let touchEndX = 0;
-                
-                this.spinningCircle.addEventListener('touchstart', (e) => {
-                    touchStartX = e.changedTouches[0].screenX;
-                });
 
-                this.spinningCircle.addEventListener('touchend', (e) => {
+                this.container.addEventListener('touchstart', (e) => {
+                    touchStartX = e.changedTouches[0].screenX;
+                }, false);
+
+                this.container.addEventListener('touchend', (e) => {
                     touchEndX = e.changedTouches[0].screenX;
                     this.handleGesture(touchStartX, touchEndX);
-                });
+                }, false);
             }
 
             handleGesture(start, end) {
                 const diff = end - start;
                 if (diff > 50) {
                     // Swipe Right - Rotate Clockwise
-                    this.spinningCircle.style.animation = 'spin 60s linear infinite';
+                    this.rotatePond(30);
                 } else if (diff < -50) {
                     // Swipe Left - Rotate Counter Clockwise
-                    this.spinningCircle.style.animation = 'spin -60s linear infinite';
+                    this.rotatePond(-30);
                 }
             }
 
-            handleUserSubmission() {
-                const userInput = this.userInput.value.trim();
-                if (userInput) {
-                    this.createUserNarrative(userInput);
-                    this.userInput.value = ''; // Clear input after submission
-                }
+            rotatePond(degrees) {
+                const currentRotation = this.container.style.transform.replace(/[^0-9\-.,]/g, '').split(',')[0] || 0;
+                const newRotation = parseInt(currentRotation) + degrees;
+                this.container.style.transition = 'transform 0.5s ease';
+                this.container.style.transform = `rotate(${newRotation}deg)`;
             }
 
-            openNarrativePath(category) {
+            openNarrative(category) {
                 this.narrativeContent.innerHTML = `
-                    <h2>${category.CategoryName}</h2>
-                    <p>${this.getCategoryDescription(category.CategoryName)}</p>
+                    <button id="close-narrative">✖</button>
+                    <h2>${category.emoji} ${category.title}</h2>
+                    <p>${category.description}</p>
                     <h3>Nominees:</h3>
-                    <ul class="nominee-list">
-                        ${category.Nominees.map(nom => `
-                            <li><strong>${nom.NomineeName}</strong> (${nom.Year}) - "${nom.FilmTitle}" from ${nom.Country}</li>
-                        `).join('')}
+                    <ul>
+                        ${this.getNomineesHTML(category.CategoryName)}
                     </ul>
-                    <div class="data-visualization" id="${this.sanitizeCategoryName(category.CategoryName)}-viz"></div>
+                    <div class="data-visualization">
+                        <canvas id="${category.id}-chart"></canvas>
+                    </div>
                 `;
-                this.narrativeOverlay.classList.remove('hidden');
-                this.narrativeOverlay.classList.add('visible');
-                
-                // Render basic data visualization
-                this.renderDataVisualization(category);
+                this.narrativeOverlay.style.opacity = '1';
+                this.narrativeOverlay.style.pointerEvents = 'all';
+
+                // Re-attach close button listener
+                document.getElementById('close-narrative').addEventListener('click', () => {
+                    this.closeNarrativeOverlay();
+                });
+
+                // Render Data Visualization
+                this.renderChart(category);
             }
 
-            sanitizeCategoryName(name) {
-                return name.toLowerCase().replace(/\s+/g, '-');
+            getNomineesHTML(categoryName) {
+                const category = this.data.Categories.find(cat => cat.CategoryName === categoryName);
+                if (!category) return '';
+                return category.Nominees.map(nom => `
+                    <li><strong>${nom.NomineeName}</strong> (${nom.Year}) - "${nom.FilmTitle}" from ${nom.Country}</li>
+                `).join('');
             }
 
-            renderDataVisualization(category) {
-                const vizContainer = document.getElementById(`${this.sanitizeCategoryName(category.CategoryName)}-viz`);
-                // Simple visualization: Count of nominees by gender
-                const genderCount = category.Nominees.reduce((acc, nom) => {
+            renderChart(category) {
+                const categoryData = this.data.Categories.find(cat => cat.CategoryName === category.CategoryName);
+                if (!categoryData) return;
+
+                const ctx = document.getElementById(`${category.id}-chart`).getContext('2d');
+                const genderCount = categoryData.Nominees.reduce((acc, nom) => {
                     acc[nom.Gender] = (acc[nom.Gender] || 0) + 1;
                     return acc;
                 }, {});
-                
-                vizContainer.innerHTML = `
-                    <canvas id="${this.sanitizeCategoryName(category.CategoryName)}-canvas" width="300" height="200"></canvas>
-                `;
-                const ctx = document.getElementById(`${this.sanitizeCategoryName(category.CategoryName)}-canvas`).getContext('2d');
+
                 const labels = Object.keys(genderCount);
                 const data = Object.values(genderCount);
                 const colors = ['#e74c3c', '#3498db', '#f1c40f', '#9b59b6'];
 
-                // Simple bar chart
-                const barWidth = 50;
-                const maxData = Math.max(...data);
-                const scale = 150 / maxData;
+                // Simple Bar Chart
+                const max = Math.max(...data);
+                const canvasHeight = ctx.canvas.height;
+                const barWidth = 40;
+                const spacing = (ctx.canvas.width - (barWidth * data.length)) / (data.length + 1);
 
-                labels.forEach((label, index) => {
-                    const barHeight = data[index] * scale;
-                    ctx.fillStyle = colors[index % colors.length];
-                    ctx.fillRect(50 + index * (barWidth + 30), 180 - barHeight, barWidth, barHeight);
-                    ctx.fillStyle = '#ecf0f1';
-                    ctx.textAlign = 'center';
-                    ctx.fillText(label, 50 + index * (barWidth + 30) + barWidth / 2, 195);
-                    ctx.fillText(data[index], 50 + index * (barWidth + 30) + barWidth / 2, 175 - barHeight);
-                });
-
+                ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
                 ctx.fillStyle = '#ecf0f1';
                 ctx.font = '14px Arial';
-                ctx.fillText('Nominees by Gender', 150, 20);
-            }
+                ctx.textAlign = 'center';
 
-            createUserNarrative(input) {
-                const narrativeElement = document.createElement('div');
-                narrativeElement.classList.add('user-narrative');
-                narrativeElement.textContent = input;
-                this.narrativeContent.appendChild(narrativeElement);
+                ctx.fillText('Nominees by Gender', ctx.canvas.width / 2, 20);
+
+                data.forEach((count, index) => {
+                    const barHeight = (count / max) * 150;
+                    const x = spacing + index * (barWidth + spacing);
+                    const y = canvasHeight - barHeight - 30;
+
+                    ctx.fillStyle = colors[index % colors.length];
+                    ctx.fillRect(x, y, barWidth, barHeight);
+
+                    ctx.fillStyle = '#ecf0f1';
+                    ctx.fillText(labels[index], x + barWidth / 2, canvasHeight - 10);
+                    ctx.fillText(count, x + barWidth / 2, y - 10);
+                });
             }
 
             closeNarrativeOverlay() {
-                this.narrativeOverlay.classList.remove('visible');
-                this.narrativeOverlay.classList.add('hidden');
+                this.narrativeOverlay.style.opacity = '0';
+                this.narrativeOverlay.style.pointerEvents = 'none';
             }
 
-            getCategoryDescription(categoryName) {
-                // Placeholder descriptions based on category
-                switch(categoryName) {
-                    case 'Golden Frog Competition':
-                        return 'The premier competition highlighting outstanding cinematography achievements.';
-                    case 'Silver Frog Competition':
-                        return 'Showcases excellent cinematography with notable artistic contributions.';
-                    case 'Bronze Frog Competition':
-                        return 'Recognizes commendable cinematography work with emerging talents.';
-                    case 'Best Animation':
-                        return 'Celebrates exceptional animated cinematography in various formats.';
-                    default:
-                        return 'Explore the narratives and data insights related to this category.';
+            submitStory() {
+                const input = this.userInput.value.trim();
+                if (input) {
+                    const hasWoman = /woman/i.test(input);
+                    this.addUserNarrative(input, hasWoman);
+                    this.userInput.value = '';
+                    this.createRippleEffect();
                 }
             }
 
-            generateAnomalyNotifications() {
-                if (this.anomalies && this.anomalies.length > 0) {
-                    const anomalyBox = document.createElement('div');
-                    anomalyBox.classList.add('narrative-box');
-                    anomalyBox.style.backgroundColor = '#e67e22';
-                    anomalyBox.textContent = 'Anomalies';
-                    anomalyBox.style.transform = `translate(0px, -150px)`;
-                    
-                    anomalyBox.addEventListener('click', () => this.openAnomalyOverlay());
-                    this.spinningCircle.appendChild(anomalyBox);
-                }
+            addUserNarrative(text, hasWoman) {
+                const node = document.createElement('div');
+                node.classList.add('narrative-node');
+                node.classList.add('user-narrative-node');
+                node.style.backgroundColor = hasWoman ? '#e74c3c' : '#2ECC71';
+                node.style.width = '80px';
+                node.style.height = '80px';
+                node.style.fontSize = '24px';
+                node.style.top = `${Math.random() * (window.innerHeight - 100)}px`;
+                node.style.left = `${Math.random() * (window.innerWidth - 100)}px`;
+
+                const emoji = document.createElement('div');
+                emoji.classList.add('emoji');
+                emoji.textContent = hasWoman ? '👩' : '🐸';
+                node.appendChild(emoji);
+
+                node.addEventListener('click', () => this.openUserNarrative(text));
+
+                this.container.appendChild(node);
             }
 
-            openAnomalyOverlay() {
+            openUserNarrative(text) {
                 this.narrativeContent.innerHTML = `
-                    <h2>Anomalies Detected</h2>
-                    <ul class="nominee-list">
-                        ${this.anomalies.map(anomaly => `
-                            <li><strong>${anomaly.Description}:</strong> ${anomaly.Details.Issue}</li>
-                        `).join('')}
-                    </ul>
+                    <button id="close-narrative">✖</button>
+                    <h2>💬 Your Narrative</h2>
+                    <p>${text}</p>
                 `;
-                this.narrativeOverlay.classList.remove('hidden');
-                this.narrativeOverlay.classList.add('visible');
+                this.narrativeOverlay.style.opacity = '1';
+                this.narrativeOverlay.style.pointerEvents = 'all';
+
+                // Re-attach close button listener
+                document.getElementById('close-narrative').addEventListener('click', () => {
+                    this.closeNarrativeOverlay();
+                });
+            }
+
+            createRippleEffect() {
+                const ripple = document.createElement('div');
+                ripple.classList.add('ripple');
+                ripple.style.left = `${Math.random() * 100}%`;
+                ripple.style.top = `${Math.random() * 100}%`;
+                ripple.style.animationDelay = `${Math.random() * 2}s`;
+                this.container.appendChild(ripple);
+
+                // Remove ripple after animation
+                setTimeout(() => {
+                    ripple.remove();
+                }, 2000);
             }
         }
 
-        // Initialize the application when DOM is fully loaded
+        // Initialize the Narrative Pond
         document.addEventListener('DOMContentLoaded', () => {
-            new GoldenFrogApp(camerimageData);
+            new NarrativePond(camerimageData);
         });
     </script>
 </body>
